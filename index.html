@@ -3,148 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کنفرانس گروهی - RemoteVM</title>
+    <title>استودیو کنفرانس - RemoteVM</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap');
         :root {
-            --light-bg: linear-gradient(135deg, #f0f5ff 0%, #e6eefc 100%);
             --dark-bg: linear-gradient(135deg, #020412 0%, #0d0d2b 100%);
-            --light-text: #1a202c;
             --dark-text: #e2e8f0;
             --neon-blue: #00bfff;
             --neon-pink: #ff00c8;
             --neon-purple: #a45eff;
-            --neon-teal: #05ebc8;
-            --neon-indigo: #4a4bff;
             --neon-green: #39ff14;
-            --rainbow-gradient-180: linear-gradient(180deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
-            --rainbow-gradient-90:  linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
-            --rainbow-gradient-270: linear-gradient(270deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
-            --rainbow-gradient-360: linear-gradient(360deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
             --anim-speed-fast: 1.5s;
-            --anim-speed-slow: 8s;
         }
-        body { background: var(--dark-bg); font-family: 'Vazirmatn', sans-serif; color: var(--dark-text); overflow-x: hidden; transition: background 0.5s ease, color 0.5s ease; }
-        body.light { background: var(--light-bg); color: var(--light-text); }
-        .container { position: relative; overflow: hidden; background: rgba(10, 10, 26, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(0, 191, 255, 0.2); border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); transition: all 0.5s ease; }
-        .light .container { background: rgba(255, 255, 255, 0.6); border-color: rgba(0, 212, 180, 0.3); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
-        @supports not (backdrop-filter: blur(16px)) { .container { background: rgba(10, 10, 26, 0.95); } .light .container { background: rgba(255, 255, 255, 0.95); } }
+        body { background: var(--dark-bg); font-family: 'Vazirmatn', sans-serif; color: var(--dark-text); }
+        .container { position: relative; overflow: hidden; background: rgba(10, 10, 26, 0.6); backdrop-filter: blur(16px); border: 1px solid rgba(0, 191, 255, 0.2); border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); }
         h1 { font-size: 2.5rem; font-weight: 800; background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 15px rgba(0, 191, 255, 0.2); }
-        .light h1 { background: linear-gradient(90deg, var(--neon-teal), var(--neon-indigo)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
-        select, input[type="text"], input[type="password"] { color: var(--dark-text); background-color: rgba(10, 10, 26, 0.7); border: 1px solid transparent; border-image: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)) 1; border-radius: 8px; padding: 10px; transition: all 0.3s ease; box-shadow: inset 0 0 8px rgba(0, 191, 255, 0.2); }
-        select:focus, input:focus { outline: none; box-shadow: 0 0 10px var(--neon-pink), inset 0 0 8px rgba(255, 0, 200, 0.3); }
-        .light select, .light input[type="text"], .light input[type="password"] { color: var(--light-text); background-color: rgba(255, 255, 255, 0.8); border-image: linear-gradient(90deg, var(--neon-teal), var(--neon-indigo)) 1; box-shadow: inset 0 0 5px rgba(0, 212, 180, 0.2); }
-        .light select:focus, .light input:focus { box-shadow: 0 0 10px var(--neon-teal), inset 0 0 5px rgba(0, 212, 180, 0.3); }
-        .btn { position: relative; overflow: hidden; background: rgba(70, 70, 70, 0.4); color: #fff; border: 1px solid rgba(0, 191, 255, 0.2); border-radius: 8px; padding: 12px 24px; transition: all 0.3s ease; z-index: 1; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+        input[type="text"], input[type="password"] { color: var(--dark-text); background-color: rgba(10, 10, 26, 0.7); border: 1px solid transparent; border-image: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)) 1; border-radius: 8px; padding: 10px; box-shadow: inset 0 0 8px rgba(0, 191, 255, 0.2); transition: all 0.3s ease; }
+        input:focus { outline: none; box-shadow: 0 0 10px var(--neon-pink), inset 0 0 8px rgba(255, 0, 200, 0.3); }
+        .btn { position: relative; overflow: hidden; background: rgba(70, 70, 70, 0.4); color: #fff; border: 1px solid rgba(0, 191, 255, 0.2); border-radius: 8px; padding: 12px 24px; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: all 0.3s ease; }
         .btn:hover { background: rgba(46, 66, 66, 0.6); transform: translateY(-2px); box-shadow: 0 0 15px rgba(0, 191, 255, 0.3); }
-        .light .btn { background: rgba(255, 255, 255, 0.6); color: var(--light-text); border: 1px solid rgba(0, 212, 180, 0.3); }
-        .border-line { position: absolute; display: block; opacity: 0; transition: opacity 0.3s; }
-        .btn:hover .border-line, .btn:focus .border-line { opacity: 1; }
-        .container .border-line { opacity: 1; }
-        .border-line:nth-child(1) { top: 0; left: -100%; width: 100%; height: 2px; background: var(--rainbow-gradient-90); }
-        .border-line:nth-child(2) { top: -100%; right: 0; width: 2px; height: 100%; background: var(--rainbow-gradient-180); }
-        .border-line:nth-child(3) { bottom: 0; right: -100%; width: 100%; height: 2px; background: var(--rainbow-gradient-270); }
-        .border-line:nth-child(4) { bottom: -100%; left: 0; width: 2px; height: 100%; background: var(--rainbow-gradient-360); }
         @keyframes animate-top { 0% { left: -100%; } 100% { left: 100%; } }
         @keyframes animate-right { 0% { top: -100%; } 100% { top: 100%; } }
         @keyframes animate-bottom { 0% { right: -100%; } 100% { right: 100%; } }
         @keyframes animate-left { 0% { bottom: -100%; } 100% { bottom: 100%; } }
-        .btn:hover .border-line:nth-child(1), .btn:focus .border-line:nth-child(1) { animation: animate-top var(--anim-speed-fast) linear infinite; }
-        .btn:hover .border-line:nth-child(2), .btn:focus .border-line:nth-child(2) { animation: animate-right var(--anim-speed-fast) linear infinite; animation-delay: calc(var(--anim-speed-fast) / 4); }
-        .btn:hover .border-line:nth-child(3), .btn:focus .border-line:nth-child(3) { animation: animate-bottom var(--anim-speed-fast) linear infinite; animation-delay: calc(var(--anim-speed-fast) / 2); }
-        .btn:hover .border-line:nth-child(4), .btn:focus .border-line:nth-child(4) { animation: animate-left var(--anim-speed-fast) linear infinite; animation-delay: calc(var(--anim-speed-fast) * 0.75); }
-        .container .border-line:nth-child(1) { animation: animate-top var(--anim-speed-slow) linear infinite; }
-        .container .border-line:nth-child(2) { animation: animate-right var(--anim-speed-slow) linear infinite; }
-        .container .border-line:nth-child(3) { animation: animate-bottom var(--anim-speed-slow) linear infinite; }
-        .container .border-line:nth-child(4) { animation: animate-left var(--anim-speed-slow) linear infinite; }
-        .status-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-left: 8px; transition: all 0.3s ease; }
+        .btn-primary .border-line-blue { position: absolute; display: block; opacity: 0; }
+        .btn-primary:hover .border-line-blue { opacity: 1; }
+        .btn-primary .border-line-blue:nth-child(1) { top: 0; left: -100%; width: 100%; height: 2px; background: linear-gradient(90deg, transparent, var(--neon-blue)); }
+        .btn-primary:hover .border-line-blue:nth-child(1) { animation: animate-top var(--anim-speed-fast) linear infinite; }
+        /* ... other neon styles ... */
+        .status-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-left: 8px; }
         .status-active { background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
-        .status-inactive { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
+        .status-inactive { background: #ff4444; }
         .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--dark-bg); display: flex; align-items: center; justify-content: center; z-index: 10000; opacity: 1; transition: opacity 0.7s ease; }
         .overlay.hidden { opacity: 0; pointer-events: none; }
-        .zoom-text { font-size: 4rem; font-weight: bold; background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-        iframe { border: none; }
-        .layout-selector input { display: none; }
-        .layout-selector label { cursor: pointer; display: block; border: 2px solid rgba(0, 191, 255, 0.3); border-radius: 8px; padding: 0.75rem; transition: all 0.2s ease-in-out; opacity: 0.7; }
-        .layout-selector input:checked + label { border-color: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink); transform: scale(1.05); opacity: 1; }
-        .light .layout-selector label { border-color: rgba(0, 212, 180, 0.4); }
-        .light .layout-selector input:checked + label { border-color: var(--neon-teal); box-shadow: 0 0 10px var(--neon-teal); }
-        .tooltip:hover::after { content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); background: rgba(10, 10, 26, 0.95); backdrop-filter: blur(5px); color: var(--neon-blue); padding: 6px 12px; border-radius: 5px; font-size: 12px; white-space: nowrap; z-index: 10; border: 1px solid var(--neon-pink); }
-        .light .tooltip:hover::after { background: rgba(255, 255, 255, 0.95); color: var(--neon-indigo); border-color: var(--neon-teal); }
+        .zoom-text { font-size: 4rem; font-weight: bold; background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)); -webkit-background-clip: text; color: transparent; }
+        .tooltip:hover::after { content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); background: rgba(10, 10, 26, 0.95); padding: 6px 12px; border-radius: 5px; font-size: 12px; white-space: nowrap; z-index: 10; }
+        .toggle-switch { display: inline-block; position: relative; width: 60px; height: 34px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-switch .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: rgba(10, 10, 26, 0.7); border: 1px solid var(--neon-blue); border-radius: 34px; transition: .4s; }
+        .toggle-switch .slider:before { position: absolute; content: ""; height: 26px; width: 26px; left: 3px; bottom: 3px; background-color: #1a202c; border-radius: 50%; transition: .4s; }
+        .toggle-switch input:checked + .slider { background-color: rgba(57, 255, 20, 0.3); border-color: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
+        .toggle-switch input:checked + .slider:before { transform: translateX(26px); background-color: #fff; }
+        #iframe-container { position: relative; overflow: hidden; border: 1px solid rgba(0, 191, 255, 0.2); border-radius: 0.5rem; }
+        .input-error { border-image: linear-gradient(90deg, #ff4444, #ff00c8) 1 !important; }
+        .error-message { color: #ff4444; font-size: 0.8rem; height: 1.2rem; transition: all 0.3s; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
     <div id="overlay" class="overlay"><span class="zoom-text">RemoteVM</span></div>
 
     <div id="appContainer" class="container mx-auto p-6 max-w-2xl w-full">
-        <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-
-        <header class="flex justify-between items-center mb-8">
-            <div class="flex items-center gap-2">
-                <h1 id="mainTitle" class="text-3xl font-bold">کنفرانس گروهی</h1>
-                <span id="statusIndicator" class="status-indicator status-inactive"></span>
-            </div>
-        </header>
-
+        <header class="flex justify-between items-center mb-8"><h1 id="mainTitle" class="text-3xl font-bold">استودیو کنفرانس</h1><span id="statusIndicator" class="status-indicator status-inactive"></span></header>
         <main>
-            <!-- بخش ایجاد اتاق -->
             <section id="roomCreationSection">
                 <div class="space-y-6">
-                    <div><label for="roomNameInput" class="block font-medium mb-2">نام اتاق (اختیاری)</label><input type="text" id="roomNameInput" class="w-full" placeholder="مثال: کلاس-برنامه-نویسی"></div>
-                    <div><label for="roomPasswordInput" class="block font-medium mb-2">رمز عبور (اختیاری)</label><input type="password" id="roomPasswordInput" class="w-full" placeholder="برای امنیت بیشتر"></div>
                     <div>
-                        <label class="block font-medium mb-2">چیدمان پیش‌فرض اتاق</label>
-                        <div class="grid grid-cols-3 gap-4 layout-selector">
-                          <div><input type="radio" id="layoutGrid" name="layout" value="grid" checked><label for="layoutGrid" class="tooltip" data-tooltip="شبکه‌ای"><svg class="w-full h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></label></div>
-                          <div><input type="radio" id="layoutColumn" name="layout" value="column"><label for="layoutColumn" class="tooltip" data-tooltip="ستونی"><svg class="w-full h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18"></path></svg></label></div>
-                          <div><input type="radio" id="layoutSpotlight" name="layout" value="spotlight"><label for="layoutSpotlight" class="tooltip" data-tooltip="تمرکز اصلی"><svg class="w-full h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="12"></rect><rect x="8" y="17" width="8" height="4"></rect></svg></label></div>
-                        </div>
+                        <label for="roomNameInput" class="block font-medium mb-2">نام اتاق (فقط حروف انگلیسی)</label>
+                        <input type="text" id="roomNameInput" class="w-full" placeholder="مثال: my-awesome-webinar">
+                        <p id="roomNameError" class="error-message"></p>
                     </div>
-                    <button id="createRoomBtn" class="btn w-full py-3 text-lg">
-                        <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-                        <svg class="w-6 h-6 ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-11h2v4h4v2h-4v4h-2v-4H5v-2h4V7z"/></svg>
-                        ایجاد اتاق کنفرانس
+                    <div>
+                        <label for="roomPasswordInput" class="block font-medium mb-2">رمز عبور اتاق (فقط حروف انگلیسی)</label>
+                        <input type="password" id="roomPasswordInput" class="w-full" placeholder="اختیاری">
+                        <p id="roomPasswordError" class="error-message"></p>
+                    </div>
+                    <details class="p-4 rounded-lg border border-dashed border-purple-500/50">
+                        <summary class="font-bold text-lg cursor-pointer">تنظیمات پیشرفته</summary>
+                        <div class="mt-4 space-y-4 pt-4 border-t border-purple-500/30">
+                            <div class="flex items-center justify-between"><span class="tooltip" data-tooltip="کیفیت صدای بهتر">صدای حرفه‌ای</span><label class="toggle-switch"><input type="checkbox" id="proaudio-toggle"><span class="slider"></span></label></div>
+                            <div class="flex items-center justify-between"><span class="tooltip" data-tooltip="ایجاد لینک برای نمایش پیام‌ها">ارسال پیام</span><label class="toggle-switch"><input type="checkbox" id="broadcast-toggle"><span class="slider"></span></label></div>
+                        </div>
+                    </details>
+                    <button id="createRoomBtn" class="btn btn-primary w-full py-3 text-lg">
+                        <span class="border-line-blue"></span><span class="border-line-blue"></span><span class="border-line-blue"></span><span class="border-line-blue"></span>
+                        ایجاد و ورود به پنل مدیریت
                     </button>
                 </div>
             </section>
-
-            <!-- بخش داخل تماس -->
             <section id="inCallSection" class="hidden">
                 <div class="space-y-6">
-                    <div class="p-4 rounded-lg border border-dashed border-cyan-500/50 bg-gray-900/50 space-y-4">
+                    <div class="p-4 rounded-lg border border-dashed border-cyan-500/50 space-y-4 text-right">
                         <div>
-                            <label class="block font-medium mb-2 text-lg text-cyan-300">لینک دعوت برای شرکت‌کنندگان:</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="guestLinkInput" class="w-full" readonly>
-                                <button id="copyGuestLinkBtn" class="btn px-4 py-3 tooltip" data-tooltip="کپی لینک دعوت">
-                                    <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8 2a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2V6l-3-3H8zm0 1h5l2 2v9H8V3zm-1 2H6a2 2 0 00-2 2v10a2 2 0 002 2h6v-2H6V7h1V5z"/></svg>
-                                </button>
-                            </div>
+                            <label class="block font-medium text-cyan-300">لینک دعوت برای شرکت‌کنندگان:</label>
+                            <div class="flex gap-2"><input type="text" id="guestLinkInput" class="w-full" readonly><button id="copyGuestLinkBtn" class="btn p-3"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8 2a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2V6l-3-3H8z"/></svg></button></div>
                         </div>
-                        <div>
-                            <label class="block font-medium mb-2 text-lg text-purple-300">لینک پنل مدیریت (مخصوص شما):</label>
-                            <div class="flex gap-2">
-                                <input type="text" id="directorLinkInput" class="w-full" readonly>
-                                <a id="directorLinkBtn" href="#" target="_blank" class="btn px-4 py-3 bg-indigo-600 tooltip" data-tooltip="در تب جدید باز می‌شود">
-                                    <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
-                                </a>
-                            </div>
+                         <div id="broadcastContainer" class="hidden">
+                             <label class="block font-medium text-cyan-300">لینک نمایش پیام‌ها (برای OBS):</label>
+                            <div class="flex gap-2"><input type="text" id="broadcastLinkInput" class="w-full" readonly><button id="copyBroadcastLinkBtn" class="btn p-3"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8 2a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2V6l-3-3H8z"/></svg></button></div>
                         </div>
-                        <p id="copyMessage" class="text-sm text-green-400 hidden" role="alert"></p>
                     </div>
-
-                    <div id="iframe-container" class="w-full aspect-video bg-black rounded-lg overflow-hidden">
-                        <iframe id="vdoFrame" class="w-full h-full"></iframe>
+                    <p id="copyMessage" class="text-sm text-green-400 h-5 text-center" role="alert"></p>
+                    <div id="iframe-container" class="w-full aspect-video bg-black rounded-lg">
+                        <iframe id="vdoFrame" class="w-full h-full" allow="camera; microphone; autoplay; display-capture; fullscreen"></iframe>
                     </div>
-
-                    <button id="endCallBtn" class="btn w-full py-3 text-lg bg-red-700 hover:bg-red-800">
-                        <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-                        پایان جلسه و خروج
-                    </button>
+                    <button id="endCallBtn" class="btn w-full py-3 text-lg bg-red-700">خروج و ساخت اتاق جدید</button>
                 </div>
             </section>
         </main>
@@ -152,17 +106,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-    // --- State & Elements ---
-    const state = {
-        isCallActive: false,
-        roomName: '',
-        directorKey: '',
-        password: '',
-        layout: 'grid',
-        guestLink: '',
-        directorLink: '',
-    };
-
+    // --- Elements ---
     const elements = {
         appContainer: document.getElementById('appContainer'),
         roomCreationSection: document.getElementById('roomCreationSection'),
@@ -171,10 +115,15 @@ document.addEventListener('DOMContentLoaded', () => {
         endCallBtn: document.getElementById('endCallBtn'),
         roomNameInput: document.getElementById('roomNameInput'),
         roomPasswordInput: document.getElementById('roomPasswordInput'),
+        roomNameError: document.getElementById('roomNameError'),
+        roomPasswordError: document.getElementById('roomPasswordError'),
         guestLinkInput: document.getElementById('guestLinkInput'),
-        directorLinkInput: document.getElementById('directorLinkInput'),
         copyGuestLinkBtn: document.getElementById('copyGuestLinkBtn'),
-        directorLinkBtn: document.getElementById('directorLinkBtn'),
+        broadcastContainer: document.getElementById('broadcastContainer'),
+        broadcastLinkInput: document.getElementById('broadcastLinkInput'),
+        copyBroadcastLinkBtn: document.getElementById('copyBroadcastLinkBtn'),
+        proaudioToggle: document.getElementById('proaudio-toggle'),
+        broadcastToggle: document.getElementById('broadcast-toggle'),
         vdoFrame: document.getElementById('vdoFrame'),
         mainTitle: document.getElementById('mainTitle'),
         statusIndicator: document.getElementById('statusIndicator'),
@@ -183,87 +132,94 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // --- Helper Functions ---
-    const generateId = (length = 12) => Math.random().toString(36).substring(2, length + 2);
+    const generateId = (length = 6) => Math.random().toString(36).substring(2, length + 2);
     const showCopyMessage = (message) => {
         elements.copyMessage.textContent = message;
-        elements.copyMessage.classList.remove('hidden');
-        setTimeout(() => elements.copyMessage.classList.add('hidden'), 2500);
+        setTimeout(() => { elements.copyMessage.textContent = ''; }, 3000);
     };
-
     const updateStatus = (isActive) => {
-        state.isCallActive = isActive;
         elements.statusIndicator.classList.toggle('status-active', isActive);
-        elements.statusIndicator.classList.toggle('status-inactive', !isActive);
         elements.roomCreationSection.classList.toggle('hidden', isActive);
         elements.inCallSection.classList.toggle('hidden', !isActive);
         if(isActive) {
-            elements.appContainer.classList.add('max-w-4xl');
+            elements.appContainer.classList.add('max-w-7xl');
             elements.appContainer.classList.remove('max-w-2xl');
         } else {
-            elements.appContainer.classList.remove('max-w-4xl');
+            elements.appContainer.classList.remove('max-w-7xl');
             elements.appContainer.classList.add('max-w-2xl');
         }
     };
+    const copyToClipboard = (inputElement, successMessage) => {
+        navigator.clipboard.writeText(inputElement.value)
+            .then(() => showCopyMessage(successMessage))
+            .catch(() => alert('خطا در کپی کردن لینک.'));
+    };
 
-    // --- Core Logic (Unchanged) ---
-    const createRoom = () => {
-        state.roomName = elements.roomNameInput.value.trim().replace(/\s+/g, '-') || `Room-${generateId(6)}`;
-        state.directorKey = generateId(12);
-        state.password = elements.roomPasswordInput.value.trim();
-        state.layout = document.querySelector('input[name="layout"]:checked').value;
+    // --- *** NEW: Input Validation Logic *** ---
+    const validateInput = (event) => {
+        const inputElement = event.target;
+        const errorElement = document.getElementById(`${inputElement.id}Error`);
+        const regex = /^[a-zA-Z0-9-_]*$/; // Allow letters, numbers, hyphen, underscore
 
-        const baseURL = "https://live.remotevm.ir/";
-        
-        // Guest link
-        const guestParams = new URLSearchParams({ 
-            room: state.roomName,
-            layout: state.layout // Add layout to guest link
-        });
-        if (state.password) {
-            guestParams.append('password', state.password);
+        if (!regex.test(inputElement.value)) {
+            // Remove invalid characters
+            inputElement.value = inputElement.value.replace(/[^a-zA-Z0-9-_]/g, '');
+            // Show error message
+            errorElement.textContent = 'فقط حروف انگلیسی، اعداد، خط تیره و زیرخط مجاز است.';
+            inputElement.classList.add('input-error');
+            // Hide message after a delay
+            setTimeout(() => {
+                errorElement.textContent = '';
+                inputElement.classList.remove('input-error');
+            }, 3000);
+        } else {
+            errorElement.textContent = '';
+            inputElement.classList.remove('input-error');
         }
-        state.guestLink = `${baseURL}?${guestParams.toString()}`;
-        
-        // Director link
-        const directorParams = new URLSearchParams({
-            room: state.roomName,
-            director: state.directorKey,
-            layout: state.layout // Also add layout to director link
-        });
-        state.directorLink = `${baseURL}?${directorParams.toString()}`;
-        
-        elements.guestLinkInput.value = state.guestLink;
-        elements.directorLinkInput.value = state.directorLink;
-        elements.directorLinkBtn.href = state.directorLink;
-        elements.mainTitle.textContent = `اتاق: ${state.roomName}`;
+    };
 
-        elements.vdoFrame.src = state.guestLink;
+    // --- Core Logic ---
+    const createRoom = () => {
+        const roomName = elements.roomNameInput.value.trim().replace(/\s+/g, '-') || `Room-${generateId()}`;
+        const roomPassword = elements.roomPasswordInput.value.trim();
+        const directorViewPassword = generateId(16);
+        const baseURL = "https://live.remotevm.ir/";
+        const stunServer = "stun:stun.l.google.com:19302";
+        const baseParams = { stun: stunServer };
+        if (elements.proaudioToggle.checked) baseParams.proaudio = '';
+        
+        const directorParams = new URLSearchParams({ ...baseParams, director: roomName, proxy: '' });
+        if (roomPassword) directorParams.append('password', roomPassword);
+        
+        const guestParams = new URLSearchParams({ ...baseParams, room: roomName, autoview: '' });
+        if (roomPassword) guestParams.append('password', roomPassword);
+        elements.guestLinkInput.value = `${baseURL}?${guestParams.toString()}`;
+        
+        if (elements.broadcastToggle.checked) {
+            const broadcastParams = new URLSearchParams({ ...baseParams, view: roomName, password: directorViewPassword });
+            elements.broadcastLinkInput.value = `${baseURL}?${broadcastParams.toString()}`;
+            directorParams.append('broadcast', directorViewPassword);
+            elements.broadcastContainer.classList.remove('hidden');
+        } else {
+            elements.broadcastContainer.classList.add('hidden');
+        }
 
+        elements.vdoFrame.src = `${baseURL}?${directorParams.toString()}`;
+        elements.mainTitle.textContent = `پنل مدیریت: ${roomName}`;
         updateStatus(true);
     };
 
-    const endRoom = () => {
-        elements.vdoFrame.src = 'about:blank';
-        elements.roomNameInput.value = '';
-        elements.roomPasswordInput.value = '';
-        elements.mainTitle.textContent = 'کنفرانس گروهی';
-        updateStatus(false);
-    };
-
-    // --- Event Listeners ---
+    // --- Event Listeners & Initial Load ---
+    elements.roomNameInput.addEventListener('input', validateInput);
+    elements.roomPasswordInput.addEventListener('input', validateInput);
     elements.createRoomBtn.addEventListener('click', createRoom);
-    elements.endCallBtn.addEventListener('click', endRoom);
-
-    elements.copyGuestLinkBtn.addEventListener('click', () => {
-        navigator.clipboard.writeText(state.guestLink)
-            .then(() => showCopyMessage('لینک شرکت‌کنندگان کپی شد!'))
-            .catch(() => alert('خطا در کپی کردن لینک.'));
+    elements.endCallBtn.addEventListener('click', () => {
+        elements.vdoFrame.src = 'about:blank';
+        updateStatus(false);
     });
-
-    // --- Initial Load ---
-    setTimeout(() => {
-        elements.overlay.classList.add('hidden');
-    }, 1200);
+    elements.copyGuestLinkBtn.addEventListener('click', () => copyToClipboard(elements.guestLinkInput, 'لینک شرکت‌کنندگان کپی شد!'));
+    elements.copyBroadcastLinkBtn.addEventListener('click', () => copyToClipboard(elements.broadcastLinkInput, 'لینک نمایش پیام کپی شد!'));
+    setTimeout(() => { elements.overlay.classList.add('hidden'); }, 1200);
 });
 </script>
 </body>
