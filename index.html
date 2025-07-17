@@ -1,370 +1,270 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="تماس تصویری با کیفیت بالا با RemoteVM">
-  <meta name="keywords" content="تماس تصویری, RemoteVM, ویدیو کنفرانس, استریم">
-  <meta name="author" content="RemoteVM">
-  <title>تماس تصویری - RemoteVM</title>
-  <link rel="icon" type="image/png" href="favicon.png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* --- FONT & BASE VARIABLES --- */
-    @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap');
-
-    :root {
-      /* Base Colors */
-      --light-bg: linear-gradient(135deg, #f0f5ff 0%, #e6eefc 100%);
-      --dark-bg: linear-gradient(135deg, #020412 0%, #0d0d2b 100%);
-      --light-text: #1a202c;
-      --dark-text: #e2e8f0;
-      
-      /* Neon Palette */
-      --neon-blue: #00bfff;
-      --neon-pink: #ff00c8;
-      --neon-purple: #a45eff;
-      --neon-teal: #05ebc8;
-      --neon-indigo: #4a4bff;
-      --neon-green: #39ff14;
-
-      /* Rainbow Gradient for Animations */
-      --rainbow-gradient-180: linear-gradient(180deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
-      --rainbow-gradient-90:  linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
-      --rainbow-gradient-270: linear-gradient(270deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
-      --rainbow-gradient-360: linear-gradient(360deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
-
-      /* Animation Speed */
-      --anim-speed-fast: 1.5s;
-      --anim-speed-slow: 8s;
-    }
-
-    /* --- BASE BODY & LAYOUT --- */
-    body {
-      background: var(--dark-bg);
-      font-family: 'Vazirmatn', sans-serif;
-      color: var(--dark-text);
-      overflow-x: hidden;
-      transition: background 0.5s ease, color 0.5s ease;
-    }
-    body.light {
-      background: var(--light-bg);
-      color: var(--light-text);
-    }
-    
-    /* --- MODERN CONTAINER WITH GLASSMORPHISM & NEON BORDER --- */
-    .container {
-      position: relative; /* Needed for border animation */
-      overflow: hidden; /* Needed for border animation */
-      background: rgba(10, 10, 26, 0.6);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px); /* Safari support */
-      border: 1px solid rgba(0, 191, 255, 0.2);
-      border-radius: 20px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      transition: all 0.5s ease;
-    }
-    .light .container {
-      background: rgba(255, 255, 255, 0.6);
-      border-color: rgba(0, 212, 180, 0.3);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    }
-    /* Fallback for older browsers */
-    @supports not (backdrop-filter: blur(16px)) {
-      .container {
-        background: rgba(10, 10, 26, 0.95);
-      }
-      .light .container {
-        background: rgba(255, 255, 255, 0.95);
-      }
-    }
-    
-    /* --- MODERN TYPOGRAPHY & TITLE --- */
-    h1 {
-      font-size: 2.5rem;
-      font-weight: 800;
-      background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: 0 0 15px rgba(0, 191, 255, 0.2);
-    }
-    .light h1 {
-      background: linear-gradient(90deg, var(--neon-teal), var(--neon-indigo));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      text-shadow: none;
-    }
-
-    /* --- MODERN FORMS & INPUTS --- */
-    select, input[type="text"] {
-      color: var(--dark-text);
-      background-color: rgba(10, 10, 26, 0.7);
-      border: 1px solid transparent;
-      background-image: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.7)), linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
-      background-origin: border-box;
-      background-clip: content-box, border-box;
-      border-radius: 8px;
-      padding: 10px;
-      transition: all 0.3s ease;
-      box-shadow: inset 0 0 8px rgba(0, 191, 255, 0.2);
-    }
-    select:focus, input:focus {
-      outline: none;
-      box-shadow: 0 0 10px var(--neon-pink), inset 0 0 8px rgba(255, 0, 200, 0.3);
-    }
-    .light select, .light input[type="text"] {
-      color: var(--light-text);
-      background-color: rgba(255, 255, 255, 0.8);
-      background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)), linear-gradient(90deg, var(--neon-teal), var(--neon-indigo));
-      box-shadow: inset 0 0 5px rgba(0, 212, 180, 0.2);
-    }
-    .light select:focus, .light input:focus {
-      box-shadow: 0 0 10px var(--neon-teal), inset 0 0 5px rgba(0, 212, 180, 0.3);
-    }
-
-    /* --- REDESIGNED BUTTON WITH NEON BORDER ANIMATION --- */
-    .btn {
-      position: relative; /* Essential for animation */
-      overflow: hidden;   /* Essential for animation */
-      background: rgba(70, 70, 70, 0.4);
-      color: #fff;
-      border: 1px solid rgba(0, 191, 255, 0.2);
-      border-radius: 8px;
-      padding: 12px 24px;
-      transition: all 0.3s ease;
-      z-index: 1; /* Keep content above animation */
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .btn:hover {
-      background: rgba(46, 66, 66, 0.6);
-      transform: translateY(-2px);
-      box-shadow: 0 0 15px rgba(0, 191, 255, 0.3);
-    }
-    .btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-      transform: none;
-      box-shadow: none;
-      background: rgba(26, 32, 44, 0.2);
-    }
-    /* Light theme button */
-    .light .btn {
-      background: rgba(255, 255, 255, 0.6);
-      color: var(--light-text);
-      border: 1px solid rgba(0, 212, 180, 0.3);
-    }
-    .light .btn:hover {
-      background: rgba(255, 255, 255, 0.8);
-      box-shadow: 0 0 12px rgba(0, 212, 180, 0.4);
-    }
-    
-    /* --- NEON BORDER ANIMATION (FOR BUTTONS & CONTAINER) --- */
-    .border-line {
-      position: absolute;
-      display: block;
-      opacity: 0; /* Hidden by default */
-      transition: opacity 0.3s;
-    }
-    .btn:hover .border-line, .btn:focus .border-line {
-      opacity: 1; /* Show on hover/focus */
-    }
-    .container .border-line {
-        opacity: 1; /* Always visible for container */
-    }
-    
-    .border-line:nth-child(1) { /* Top */
-      top: 0; left: -100%; width: 100%; height: 2px;
-      background: var(--rainbow-gradient-90);
-    }
-    .border-line:nth-child(2) { /* Right */
-      top: -100%; right: 0; width: 2px; height: 100%;
-      background: var(--rainbow-gradient-180);
-    }
-    .border-line:nth-child(3) { /* Bottom */
-      bottom: 0; right: -100%; width: 100%; height: 2px;
-      background: var(--rainbow-gradient-270);
-    }
-    .border-line:nth-child(4) { /* Left */
-      bottom: -100%; left: 0; width: 2px; height: 100%;
-      background: var(--rainbow-gradient-360);
-    }
-
-    /* Keyframes for the animation */
-    @keyframes animate-top { 0% { left: -100%; } 100% { left: 100%; } }
-    @keyframes animate-right { 0% { top: -100%; } 100% { top: 100%; } }
-    @keyframes animate-bottom { 0% { right: -100%; } 100% { right: 100%; } }
-    @keyframes animate-left { 0% { bottom: -100%; } 100% { bottom: 100%; } }
-
-    /* Applying animation to buttons on hover/focus */
-    .btn:hover .border-line:nth-child(1), .btn:focus .border-line:nth-child(1) { animation: animate-top var(--anim-speed-fast) linear infinite; }
-    .btn:hover .border-line:nth-child(2), .btn:focus .border-line:nth-child(2) { animation: animate-right var(--anim-speed-fast) linear infinite; animation-delay: calc(var(--anim-speed-fast) / 4); }
-    .btn:hover .border-line:nth-child(3), .btn:focus .border-line:nth-child(3) { animation: animate-bottom var(--anim-speed-fast) linear infinite; animation-delay: calc(var(--anim-speed-fast) / 2); }
-    .btn:hover .border-line:nth-child(4), .btn:focus .border-line:nth-child(4) { animation: animate-left var(--anim-speed-fast) linear infinite; animation-delay: calc(var(--anim-speed-fast) * 0.75); }
-    
-    /* Applying a SLOW, continuous animation to the container */
-    .container .border-line:nth-child(1) { animation: animate-top var(--anim-speed-slow) linear infinite; }
-    .container .border-line:nth-child(2) { animation: animate-right var(--anim-speed-slow) linear infinite; }
-    .container .border-line:nth-child(3) { animation: animate-bottom var(--anim-speed-slow) linear infinite; }
-    .container .border-line:nth-child(4) { animation: animate-left var(--anim-speed-slow) linear infinite; }
-    
-
-    /* --- OTHER UI ELEMENTS (UNCHANGED LOGIC, UPDATED STYLE) --- */
-    .loader { border: 4px solid rgba(0, 191, 255, 0.2); border-top: 4px solid var(--neon-blue); border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 20px auto; }
-    .light .loader { border-color: rgba(0, 212, 180, 0.2); border-top-color: var(--neon-teal); }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    
-    .fade-in { animation: fadeIn 0.8s ease-in; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-    .tooltip:hover::after { content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); background: rgba(10, 10, 26, 0.95); backdrop-filter: blur(5px); color: var(--neon-blue); padding: 6px 12px; border-radius: 5px; font-size: 12px; white-space: nowrap; z-index: 10; border: 1px solid var(--neon-pink); }
-    .light .tooltip:hover::after { background: rgba(255, 255, 255, 0.95); color: var(--neon-indigo); border-color: var(--neon-teal); }
-    
-    .fullscreen-iframe { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 9999; border: none; }
-    
-    .status-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-left: 8px; transition: all 0.3s ease; }
-    .status-active { background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
-    .status-inactive { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
-    .light .status-active { background: var(--neon-teal); box-shadow: 0 0 8px var(--neon-teal); }
-
-    /* --- OVERLAY & FOOTER --- */
-    .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--dark-bg); display: flex; align-items: center; justify-content: center; z-index: 10000; opacity: 1; transition: opacity 0.7s ease; }
-    .light .overlay { background: var(--light-bg); }
-    .overlay.hidden { opacity: 0; pointer-events: none; }
-
-    .zoom-text { font-size: 4rem; font-weight: bold; font-family: 'Vazirmatn', sans-serif; animation: zoomIn 0.8s ease-in-out; background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 15px rgba(0, 191, 255, 0.2); }
-    .light .zoom-text { background: linear-gradient(90deg, var(--neon-teal), var(--neon-indigo)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
-    @keyframes zoomIn { from { transform: scale(3); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-    footer a { color: var(--neon-blue); transition: all 0.3s ease; }
-    .light footer a { color: var(--neon-indigo); }
-    footer a:hover { color: var(--neon-pink); text-shadow: 0 0 8px var(--neon-pink); }
-    .light footer a:hover { color: var(--neon-teal); text-shadow: 0 0 6px var(--neon-teal); }
-
-    /* --- RESPONSIVE ADJUSTMENTS --- */
-    @media (max-width: 640px) {
-      h1 { font-size: 2rem; }
-      .btn { padding: 10px 16px; font-size: 0.9rem;}
-      .container { padding: 1rem; }
-      .zoom-text { font-size: 3rem; }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کنفرانس گروهی - RemoteVM</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap');
+        :root {
+            --light-bg: linear-gradient(135deg, #f0f5ff 0%, #e6eefc 100%);
+            --dark-bg: linear-gradient(135deg, #020412 0%, #0d0d2b 100%);
+            --light-text: #1a202c;
+            --dark-text: #e2e8f0;
+            --neon-blue: #00bfff;
+            --neon-pink: #ff00c8;
+            --neon-purple: #a45eff;
+            --neon-teal: #05ebc8;
+            --neon-indigo: #4a4bff;
+            --neon-green: #39ff14;
+            --rainbow-gradient-180: linear-gradient(180deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            --rainbow-gradient-90:  linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            --rainbow-gradient-270: linear-gradient(270deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            --rainbow-gradient-360: linear-gradient(360deg, transparent, var(--neon-blue), var(--neon-pink), var(--neon-purple));
+            --anim-speed-fast: 1.5s;
+            --anim-speed-slow: 8s;
+        }
+        body { background: var(--dark-bg); font-family: 'Vazirmatn', sans-serif; color: var(--dark-text); overflow-x: hidden; transition: background 0.5s ease, color 0.5s ease; }
+        body.light { background: var(--light-bg); color: var(--light-text); }
+        .container { position: relative; overflow: hidden; background: rgba(10, 10, 26, 0.6); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(0, 191, 255, 0.2); border-radius: 20px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); transition: all 0.5s ease; }
+        .light .container { background: rgba(255, 255, 255, 0.6); border-color: rgba(0, 212, 180, 0.3); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); }
+        @supports not (backdrop-filter: blur(16px)) { .container { background: rgba(10, 10, 26, 0.95); } .light .container { background: rgba(255, 255, 255, 0.95); } }
+        h1 { font-size: 2.5rem; font-weight: 800; background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: 0 0 15px rgba(0, 191, 255, 0.2); }
+        .light h1 { background: linear-gradient(90deg, var(--neon-teal), var(--neon-indigo)); -webkit-background-clip: text; background-clip: text; color: transparent; text-shadow: none; }
+        select, input[type="text"], input[type="password"] { color: var(--dark-text); background-color: rgba(10, 10, 26, 0.7); border: 1px solid transparent; border-image: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)) 1; border-radius: 8px; padding: 10px; transition: all 0.3s ease; box-shadow: inset 0 0 8px rgba(0, 191, 255, 0.2); }
+        select:focus, input:focus { outline: none; box-shadow: 0 0 10px var(--neon-pink), inset 0 0 8px rgba(255, 0, 200, 0.3); }
+        .light select, .light input[type="text"], .light input[type="password"] { color: var(--light-text); background-color: rgba(255, 255, 255, 0.8); border-image: linear-gradient(90deg, var(--neon-teal), var(--neon-indigo)) 1; box-shadow: inset 0 0 5px rgba(0, 212, 180, 0.2); }
+        .light select:focus, .light input:focus { box-shadow: 0 0 10px var(--neon-teal), inset 0 0 5px rgba(0, 212, 180, 0.3); }
+        .btn { position: relative; overflow: hidden; background: rgba(70, 70, 70, 0.4); color: #fff; border: 1px solid rgba(0, 191, 255, 0.2); border-radius: 8px; padding: 12px 24px; transition: all 0.3s ease; z-index: 1; display: inline-flex; align-items: center; justify-content: center; text-decoration: none; }
+        .btn:hover { background: rgba(46, 66, 66, 0.6); transform: translateY(-2px); box-shadow: 0 0 15px rgba(0, 191, 255, 0.3); }
+        .light .btn { background: rgba(255, 255, 255, 0.6); color: var(--light-text); border: 1px solid rgba(0, 212, 180, 0.3); }
+        .border-line { position: absolute; display: block; opacity: 0; transition: opacity 0.3s; }
+        .btn:hover .border-line, .btn:focus .border-line { opacity: 1; }
+        .container .border-line { opacity: 1; }
+        .border-line:nth-child(1) { top: 0; left: -100%; width: 100%; height: 2px; background: var(--rainbow-gradient-90); }
+        .border-line:nth-child(2) { top: -100%; right: 0; width: 2px; height: 100%; background: var(--rainbow-gradient-180); }
+        .border-line:nth-child(3) { bottom: 0; right: -100%; width: 100%; height: 2px; background: var(--rainbow-gradient-270); }
+        .border-line:nth-child(4) { bottom: -100%; left: 0; width: 2px; height: 100%; background: var(--rainbow-gradient-360); }
+        @keyframes animate-top { 0% { left: -100%; } 100% { left: 100%; } }
+        @keyframes animate-right { 0% { top: -100%; } 100% { top: 100%; } }
+        @keyframes animate-bottom { 0% { right: -100%; } 100% { right: 100%; } }
+        @keyframes animate-left { 0% { bottom: -100%; } 100% { bottom: 100%; } }
+        .btn:hover .border-line:nth-child(1), .btn:focus .border-line:nth-child(1) { animation: animate-top var(--anim-speed-fast) linear infinite; }
+        .btn:hover .border-line:nth-child(2), .btn:focus .border-line:nth-child(2) { animation: animate-right var(--anim-speed-fast) linear infinite; animation-delay: calc(var(--anim-speed-fast) / 4); }
+        .btn:hover .border-line:nth-child(3), .btn:focus .border-line:nth-child(3) { animation: animate-bottom var(--anim-speed-fast) linear infinite; animation-delay: calc(var(--anim-speed-fast) / 2); }
+        .btn:hover .border-line:nth-child(4), .btn:focus .border-line:nth-child(4) { animation: animate-left var(--anim-speed-fast) linear infinite; animation-delay: calc(var(--anim-speed-fast) * 0.75); }
+        .container .border-line:nth-child(1) { animation: animate-top var(--anim-speed-slow) linear infinite; }
+        .container .border-line:nth-child(2) { animation: animate-right var(--anim-speed-slow) linear infinite; }
+        .container .border-line:nth-child(3) { animation: animate-bottom var(--anim-speed-slow) linear infinite; }
+        .container .border-line:nth-child(4) { animation: animate-left var(--anim-speed-slow) linear infinite; }
+        .status-indicator { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-left: 8px; transition: all 0.3s ease; }
+        .status-active { background: var(--neon-green); box-shadow: 0 0 10px var(--neon-green); }
+        .status-inactive { background: #ff4444; box-shadow: 0 0 10px #ff4444; }
+        .overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--dark-bg); display: flex; align-items: center; justify-content: center; z-index: 10000; opacity: 1; transition: opacity 0.7s ease; }
+        .overlay.hidden { opacity: 0; pointer-events: none; }
+        .zoom-text { font-size: 4rem; font-weight: bold; background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+        iframe { border: none; }
+        .layout-selector input { display: none; }
+        .layout-selector label { cursor: pointer; display: block; border: 2px solid rgba(0, 191, 255, 0.3); border-radius: 8px; padding: 0.75rem; transition: all 0.2s ease-in-out; opacity: 0.7; }
+        .layout-selector input:checked + label { border-color: var(--neon-pink); box-shadow: 0 0 10px var(--neon-pink); transform: scale(1.05); opacity: 1; }
+        .light .layout-selector label { border-color: rgba(0, 212, 180, 0.4); }
+        .light .layout-selector input:checked + label { border-color: var(--neon-teal); box-shadow: 0 0 10px var(--neon-teal); }
+        .tooltip:hover::after { content: attr(data-tooltip); position: absolute; bottom: 125%; left: 50%; transform: translateX(-50%); background: rgba(10, 10, 26, 0.95); backdrop-filter: blur(5px); color: var(--neon-blue); padding: 6px 12px; border-radius: 5px; font-size: 12px; white-space: nowrap; z-index: 10; border: 1px solid var(--neon-pink); }
+        .light .tooltip:hover::after { background: rgba(255, 255, 255, 0.95); color: var(--neon-indigo); border-color: var(--neon-teal); }
+    </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
-  <div id="overlay" class="overlay">
-    <span class="zoom-text">RemoteVM</span>
-  </div>
+    <div id="overlay" class="overlay"><span class="zoom-text">RemoteVM</span></div>
 
-  <!-- The container now has the border lines for its own animation -->
-  <div class="container mx-auto p-6 max-w-xl">
-    <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
+    <div id="appContainer" class="container mx-auto p-6 max-w-2xl w-full">
+        <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
 
-    <header class="flex justify-between items-center mb-8">
-      <div class="flex items-center gap-2">
-        <h1 class="text-3xl font-bold">تماس تصویری RemoteVM</h1>
-        <span id="statusIndicator" class="status-indicator status-inactive" aria-label="وضعیت تماس"></span>
-      </div>
-      <button id="themeToggle" class="btn p-2 rounded-full focus:outline-none tooltip" aria-label="تغییر تم" data-tooltip="تغییر تم">
-          <!-- NOTE: Added border-line spans to all buttons -->
-          <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-          <svg id="themeIcon" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"></svg>
-      </button>
-    </header>
+        <header class="flex justify-between items-center mb-8">
+            <div class="flex items-center gap-2">
+                <h1 id="mainTitle" class="text-3xl font-bold">کنفرانس گروهی</h1>
+                <span id="statusIndicator" class="status-indicator status-inactive"></span>
+            </div>
+        </header>
 
-    <main class="fade-in">
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
-        <button id="startCallBtn" onclick="startVDOCall()" class="btn px-6 py-3 tooltip" data-tooltip="شروع تماس جدید">
-          <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-          <svg class="w-5 h-5 inline-block ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-11h2v4h4v2h-4v4h-2v-4H5v-2h4V7z"/></svg>
-          ساخت اتاق تماس
-        </button>
-        <button id="fsButton" onclick="goFullscreen()" class="btn px-6 py-3 hidden tooltip" data-tooltip="نمایش تمام‌صفحه">
-          <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-          <svg class="w-5 h-5 inline-block ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M5 3h10a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2zm8 2H7a1 1 0 00-1 1v8a1 1 0 001 1h6a1 1 0 001-1V6a1 1 0 00-1-1z"/></svg>
-          تمام‌صفحه
-        </button>
-        <button id="stopCallButton" onclick="stopVDOCall()" class="btn px-6 py-3 hidden tooltip" data-tooltip="پایان دادن به تماس">
-           <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-          <svg class="w-5 h-5 inline-block ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zM8 7h4v6H8V7z"/></svg>
-          توقف تماس
-        </button>
-        <button id="resetButton" onclick="resetPage()" class="btn px-6 py-3 hidden tooltip" data-tooltip="بازنشانی تنظیمات">
-           <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-          <svg class="w-5 h-5 inline-block ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M4 2a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2V4a2 2 0 00-2-2H4zm2 5h8v2H6V7z"/></svg>
-          ریست صفحه
-        </button>
-        <button id="muteButton" onclick="toggleMute()" class="btn px-6 py-3 hidden tooltip" data-tooltip="بی‌صدا/باصدا کردن">
-          <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-          <svg class="w-5 h-5 inline-block ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 3a2 2 0 00-2 2v5a2 2 0 002 2h1l1 5h2V3h-4z"/></svg>
-          بی‌صدا
-        </button>
-        <button id="shareButton" onclick="shareRoomLink()" class="btn px-6 py-3 hidden tooltip" data-tooltip="کپی لینک اتاق">
-          <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-          <svg class="w-5 h-5 inline-block ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M15 8a3 3 0 10-2.12-5.12L8 7.76 3.12 2.88a3 3 0 10-1.42 1.42L6.58 9 1.7 13.88a3 3 0 104.24 4.24L11 13.24l4.88 4.88a3 3 0 104.24-4.24L15.24 9l4.88-4.88A3 3 0 0015 8z"/></svg>
-          اشتراک لینک
-        </button>
-      </div>
+        <main>
+            <!-- بخش ایجاد اتاق -->
+            <section id="roomCreationSection">
+                <div class="space-y-6">
+                    <div><label for="roomNameInput" class="block font-medium mb-2">نام اتاق (اختیاری)</label><input type="text" id="roomNameInput" class="w-full" placeholder="مثال: کلاس-برنامه-نویسی"></div>
+                    <div><label for="roomPasswordInput" class="block font-medium mb-2">رمز عبور (اختیاری)</label><input type="password" id="roomPasswordInput" class="w-full" placeholder="برای امنیت بیشتر"></div>
+                    <div>
+                        <label class="block font-medium mb-2">چیدمان پیش‌فرض اتاق</label>
+                        <div class="grid grid-cols-3 gap-4 layout-selector">
+                          <div><input type="radio" id="layoutGrid" name="layout" value="grid" checked><label for="layoutGrid" class="tooltip" data-tooltip="شبکه‌ای"><svg class="w-full h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg></label></div>
+                          <div><input type="radio" id="layoutColumn" name="layout" value="column"><label for="layoutColumn" class="tooltip" data-tooltip="ستونی"><svg class="w-full h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3h7a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-7m0-18H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h7m0-18v18"></path></svg></label></div>
+                          <div><input type="radio" id="layoutSpotlight" name="layout" value="spotlight"><label for="layoutSpotlight" class="tooltip" data-tooltip="تمرکز اصلی"><svg class="w-full h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="12"></rect><rect x="8" y="17" width="8" height="4"></rect></svg></label></div>
+                        </div>
+                    </div>
+                    <button id="createRoomBtn" class="btn w-full py-3 text-lg">
+                        <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
+                        <svg class="w-6 h-6 ml-2" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm-1-11h2v4h4v2h-4v4h-2v-4H5v-2h4V7z"/></svg>
+                        ایجاد اتاق کنفرانس
+                    </button>
+                </div>
+            </section>
 
-      <div class="mb-8">
-        <label for="qualitySelect" class="block font-medium mb-2">کیفیت ویدیو:</label>
-        <select id="qualitySelect" class="w-full focus:outline-none" onchange="updateQuality()">
-          <option value="480">480p (پایین)</option>
-          <option value="720" selected>720p (پیشنهادی)</option>
-          <option value="1080">1080p (بالا)</option>
-        </select>
-      </div>
+            <!-- بخش داخل تماس -->
+            <section id="inCallSection" class="hidden">
+                <div class="space-y-6">
+                    <div class="p-4 rounded-lg border border-dashed border-cyan-500/50 bg-gray-900/50 space-y-4">
+                        <div>
+                            <label class="block font-medium mb-2 text-lg text-cyan-300">لینک دعوت برای شرکت‌کنندگان:</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="guestLinkInput" class="w-full" readonly>
+                                <button id="copyGuestLinkBtn" class="btn px-4 py-3 tooltip" data-tooltip="کپی لینک دعوت">
+                                    <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
+                                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8 2a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2V6l-3-3H8zm0 1h5l2 2v9H8V3zm-1 2H6a2 2 0 00-2 2v10a2 2 0 002 2h6v-2H6V7h1V5z"/></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block font-medium mb-2 text-lg text-purple-300">لینک پنل مدیریت (مخصوص شما):</label>
+                            <div class="flex gap-2">
+                                <input type="text" id="directorLinkInput" class="w-full" readonly>
+                                <a id="directorLinkBtn" href="#" target="_blank" class="btn px-4 py-3 bg-indigo-600 tooltip" data-tooltip="در تب جدید باز می‌شود">
+                                    <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
+                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                                </a>
+                            </div>
+                        </div>
+                        <p id="copyMessage" class="text-sm text-green-400 hidden" role="alert"></p>
+                    </div>
 
-      <div id="loader" class="loader hidden" aria-label="در حال بارگذاری"></div>
-      
-      <iframe id="vdoFrame" class="w-full h-[300px] md:h-[400px] rounded-lg hidden border-2 border-transparent" allow="camera; microphone; fullscreen" title="پنجره تماس تصویری"></iframe>
+                    <div id="iframe-container" class="w-full aspect-video bg-black rounded-lg overflow-hidden">
+                        <iframe id="vdoFrame" class="w-full h-full"></iframe>
+                    </div>
 
-      <section id="obsSection" class="mt-8 hidden">
-        <label for="obsLink" class="block font-medium mb-2">لینک نمایش در مرورگر یا OBS:</label>
-        <div class="flex gap-2">
-          <input type="text" id="obsLink" class="w-full" readonly aria-label="لینک OBS">
-          <button onclick="copyOBSLink()" class="btn px-4 py-3 tooltip" aria-label="کپی لینک OBS" data-tooltip="کپی لینک">
-            <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M8 2a2 2 0 00-2 2v10a2 2 0 002 2h6a2 2 0 002-2V6l-3-3H8zm0 1h5l2 2v9H8V3zm-1 2H6a2 2 0 00-2 2v10a2 2 0 002 2h6v-2H6V7h1V5z"/></svg>
-          </button>
-        </div>
-        <p id="copyMessage" class="mt-2 text-sm text-green-400 hidden" role="alert">لینک با موفقیت کپی شد!</p>
-        <p id="errorMessage" class="mt-2 text-sm text-red-400 hidden" role="alert"></p>
-      </section>
-    </main>
+                    <button id="endCallBtn" class="btn w-full py-3 text-lg bg-red-700 hover:bg-red-800">
+                        <span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span>
+                        پایان جلسه و خروج
+                    </button>
+                </div>
+            </section>
+        </main>
+    </div>
 
-    <footer class="mt-8 text-center text-sm opacity-70">
-      <p>© 2025 <a href="https://remotevm.site/" target="_blank">RemoteVM</a> -- <a href="https://about.remotevm.ir/" target="_blank">R.V.M</a>. تمامی حقوق محفوظ است.</p>
-    </footer>
-  </div>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- State & Elements ---
+    const state = {
+        isCallActive: false,
+        roomName: '',
+        directorKey: '',
+        password: '',
+        layout: 'grid',
+        guestLink: '',
+        directorLink: '',
+    };
 
-  <script>
-    // --- JAVASCRIPT LOGIC (NO CHANGES MADE TO FUNCTIONALITY) ---
-    // ... all of your existing javascript code goes here, unchanged.
-    const state = { isCallActive: false, isMuted: false, obsLink: '', isLoading: false, currentQuality: '720' };
-    const elements = { vdoFrame: document.getElementById('vdoFrame'), obsLinkInput: document.getElementById('obsLink'), obsSection: document.getElementById('obsSection'), fsButton: document.getElementById('fsButton'), stopCallButton: document.getElementById('stopCallButton'), resetButton: document.getElementById('resetButton'), startCallBtn: document.getElementById('startCallBtn'), muteButton: document.getElementById('muteButton'), shareButton: document.getElementById('shareButton'), loader: document.getElementById('loader'), qualitySelect: document.getElementById('qualitySelect'), copyMessage: document.getElementById('copyMessage'), errorMessage: document.getElementById('errorMessage'), statusIndicator: document.getElementById('statusIndicator'), themeToggle: document.getElementById('themeToggle'), themeIcon: document.getElementById('themeIcon'), overlay: document.getElementById('overlay') };
-    const debounce = (func, wait) => { let timeout; return (...args) => { clearTimeout(timeout); timeout = setTimeout(() => func.apply(this, args), wait); }; };
-    const showMessage = (message, type) => { const messageElement = type === 'success' ? elements.copyMessage : elements.errorMessage; messageElement.textContent = message; messageElement.classList.remove('hidden'); setTimeout(() => messageElement.classList.add('hidden'), 2000); };
-    const toggleLoader = (show) => { state.isLoading = show; elements.loader.classList.toggle('hidden', !show); elements.startCallBtn.disabled = show; };
-    const updateStatusIndicator = () => { elements.statusIndicator.classList.toggle('status-active', state.isCallActive); elements.statusIndicator.classList.toggle('status-inactive', !state.isCallActive); };
-    const updateThemeIcon = () => { const isLight = document.body.classList.contains('light'); elements.themeIcon.innerHTML = isLight ? '<path fill-rule="evenodd" d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" clip-rule="evenodd" />' : '<path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>'; };
-    function updateQuality() { state.currentQuality = elements.qualitySelect.value; if (state.isCallActive) { startVDOCall(); } }
-    window.addEventListener('load', () => { setTimeout(() => elements.overlay.classList.add('hidden'), 1200); });
-    async function startVDOCall() { if (state.isCallActive || state.isLoading) return; try { toggleLoader(true); state.isCallActive = true; elements.startCallBtn.classList.add('hidden'); elements.fsButton.classList.remove('hidden'); elements.stopCallButton.classList.remove('hidden'); elements.resetButton.classList.remove('hidden'); elements.muteButton.classList.remove('hidden'); elements.shareButton.classList.remove('hidden'); const roomId = `room${Math.floor(Math.random() * 100000)}`; const quality = state.currentQuality; const pushURL = `https://live.remotevm.ir/?push=${roomId}&cleanish&transparent&scale=cover&resolution=${quality}p`; state.obsLink = `https://live.remotevm.ir/?view=${roomId}&clean&resolution=${quality}p`; elements.vdoFrame.src = pushURL; elements.vdoFrame.classList.remove('hidden'); await new Promise(resolve => setTimeout(resolve, 1000)); elements.obsLinkInput.value = state.obsLink; elements.obsSection.classList.remove('hidden'); updateStatusIndicator(); showMessage('اتاق تماس با موفقیت ایجاد شد', 'success'); } catch (error) { console.error('Error starting call:', error); showMessage('خطا در ایجاد تماس: ' + error.message, 'error'); resetPage(); } finally { toggleLoader(false); } }
-    function stopVDOCall() { if (!state.isCallActive) return; resetPage(); showMessage('تماس با موفقیت متوقف شد', 'success'); }
-    function resetPage() { state.isCallActive = false; state.isMuted = false; state.obsLink = ''; elements.vdoFrame.src = ''; elements.vdoFrame.classList.add('hidden'); elements.obsSection.classList.add('hidden'); elements.fsButton.classList.add('hidden'); elements.stopCallButton.classList.add('hidden'); elements.muteButton.classList.add('hidden'); elements.shareButton.classList.add('hidden'); elements.resetButton.classList.add('hidden'); elements.startCallBtn.classList.remove('hidden'); elements.startCallBtn.disabled = false; elements.obsLinkInput.value = ''; elements.qualitySelect.value = '720'; state.currentQuality = '720'; updateStatusIndicator(); }
-    async function copyOBSLink() { if (!state.obsLink) return showMessage('لینکی برای کپی وجود ندارد!', 'error'); try { if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(state.obsLink); showMessage('لینک OBS با موفقیت کپی شد!', 'success'); } else { elements.obsLinkInput.select(); document.execCommand('copy'); showMessage('لینک OBS با موفقیت کپی شد!', 'success'); } } catch (error) { console.error('Error copying OBS link:', error); showMessage('خطا در کپی لینک OBS!', 'error'); } }
-    async function shareRoomLink() { if (!state.obsLink) return showMessage('لینکی برای اشتراک وجود ندارد!', 'error'); try { await navigator.clipboard.writeText(state.obsLink); showMessage('لینک اتاق با موفقیت کپی شد!', 'success'); } catch (error) { console.error('Error sharing room link:', error); showMessage('خطا در کپی لینک اتاق!', 'error'); } }
-    function goFullscreen() { const iframe = elements.vdoFrame; iframe.classList.add('fullscreen-iframe'); const requestFullscreen = iframe.requestFullscreen || iframe.mozRequestFullScreen || iframe.webkitRequestFullscreen || iframe.msRequestFullscreen; if (requestFullscreen) { requestFullscreen.call(iframe).catch(err => showMessage('خطا در ورود به حالت تمام‌صفحه: ' + err.message, 'error')); } else { showMessage('مرورگر شما از حالت تمام‌صفحه پشتیبانی نمی‌کند', 'error'); } }
-    function toggleMute() { state.isMuted = !state.isMuted; elements.muteButton.innerHTML = `<span class="border-line"></span><span class="border-line"></span><span class="border-line"></span><span class="border-line"></span> <svg class="w-5 h-5 inline-block ml-2" fill="currentColor" viewBox="0 0 20 20"> <path d="${state.isMuted ? 'M10 3a2 2 0 00-2 2v5l-3 3v2h3l3-3h1V5a2 2 0 00-2-2H8zm5 2l-3 3' : 'M10 3a2 2 0 00-2 2v5a2 2 0 002 2h1l1 5h2V3h-4z'}"/> </svg> ${state.isMuted ? 'باصدا' : 'بی‌صدا'}`; showMessage(state.isMuted ? 'میکروفون بی‌صدا شد' : 'میکروفون باصدا شد', 'success'); }
-    document.addEventListener('fullscreenchange', () => { if (!document.fullscreenElement) elements.vdoFrame.classList.remove('fullscreen-iframe'); });
-    elements.themeToggle.addEventListener('click', () => { document.body.classList.toggle('light'); const isLight = document.body.classList.contains('light'); updateThemeIcon(); localStorage.setItem('theme', isLight ? 'light' : 'dark'); });
-    if (localStorage.getItem('theme') === 'light' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: light)').matches)) { document.body.classList.add('light'); }
-    updateThemeIcon();
-    window.addEventListener('resize', debounce(() => { if (!document.fullscreenElement) elements.vdoFrame.classList.remove('fullscreen-iframe'); }, 200));
-    document.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !elements.startCallBtn.classList.contains('hidden')) startVDOCall(); });
-  </script>
+    const elements = {
+        appContainer: document.getElementById('appContainer'),
+        roomCreationSection: document.getElementById('roomCreationSection'),
+        inCallSection: document.getElementById('inCallSection'),
+        createRoomBtn: document.getElementById('createRoomBtn'),
+        endCallBtn: document.getElementById('endCallBtn'),
+        roomNameInput: document.getElementById('roomNameInput'),
+        roomPasswordInput: document.getElementById('roomPasswordInput'),
+        guestLinkInput: document.getElementById('guestLinkInput'),
+        directorLinkInput: document.getElementById('directorLinkInput'),
+        copyGuestLinkBtn: document.getElementById('copyGuestLinkBtn'),
+        directorLinkBtn: document.getElementById('directorLinkBtn'),
+        vdoFrame: document.getElementById('vdoFrame'),
+        mainTitle: document.getElementById('mainTitle'),
+        statusIndicator: document.getElementById('statusIndicator'),
+        copyMessage: document.getElementById('copyMessage'),
+        overlay: document.getElementById('overlay'),
+    };
+
+    // --- Helper Functions ---
+    const generateId = (length = 12) => Math.random().toString(36).substring(2, length + 2);
+    const showCopyMessage = (message) => {
+        elements.copyMessage.textContent = message;
+        elements.copyMessage.classList.remove('hidden');
+        setTimeout(() => elements.copyMessage.classList.add('hidden'), 2500);
+    };
+
+    const updateStatus = (isActive) => {
+        state.isCallActive = isActive;
+        elements.statusIndicator.classList.toggle('status-active', isActive);
+        elements.statusIndicator.classList.toggle('status-inactive', !isActive);
+        elements.roomCreationSection.classList.toggle('hidden', isActive);
+        elements.inCallSection.classList.toggle('hidden', !isActive);
+        if(isActive) {
+            elements.appContainer.classList.add('max-w-4xl');
+            elements.appContainer.classList.remove('max-w-2xl');
+        } else {
+            elements.appContainer.classList.remove('max-w-4xl');
+            elements.appContainer.classList.add('max-w-2xl');
+        }
+    };
+
+    // --- Core Logic (Unchanged) ---
+    const createRoom = () => {
+        state.roomName = elements.roomNameInput.value.trim().replace(/\s+/g, '-') || `Room-${generateId(6)}`;
+        state.directorKey = generateId(12);
+        state.password = elements.roomPasswordInput.value.trim();
+        state.layout = document.querySelector('input[name="layout"]:checked').value;
+
+        const baseURL = "https://live.remotevm.ir/";
+        
+        // Guest link
+        const guestParams = new URLSearchParams({ 
+            room: state.roomName,
+            layout: state.layout // Add layout to guest link
+        });
+        if (state.password) {
+            guestParams.append('password', state.password);
+        }
+        state.guestLink = `${baseURL}?${guestParams.toString()}`;
+        
+        // Director link
+        const directorParams = new URLSearchParams({
+            room: state.roomName,
+            director: state.directorKey,
+            layout: state.layout // Also add layout to director link
+        });
+        state.directorLink = `${baseURL}?${directorParams.toString()}`;
+        
+        elements.guestLinkInput.value = state.guestLink;
+        elements.directorLinkInput.value = state.directorLink;
+        elements.directorLinkBtn.href = state.directorLink;
+        elements.mainTitle.textContent = `اتاق: ${state.roomName}`;
+
+        elements.vdoFrame.src = state.guestLink;
+
+        updateStatus(true);
+    };
+
+    const endRoom = () => {
+        elements.vdoFrame.src = 'about:blank';
+        elements.roomNameInput.value = '';
+        elements.roomPasswordInput.value = '';
+        elements.mainTitle.textContent = 'کنفرانس گروهی';
+        updateStatus(false);
+    };
+
+    // --- Event Listeners ---
+    elements.createRoomBtn.addEventListener('click', createRoom);
+    elements.endCallBtn.addEventListener('click', endRoom);
+
+    elements.copyGuestLinkBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(state.guestLink)
+            .then(() => showCopyMessage('لینک شرکت‌کنندگان کپی شد!'))
+            .catch(() => alert('خطا در کپی کردن لینک.'));
+    });
+
+    // --- Initial Load ---
+    setTimeout(() => {
+        elements.overlay.classList.add('hidden');
+    }, 1200);
+});
+</script>
 </body>
 </html>
